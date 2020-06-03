@@ -24,7 +24,7 @@ function render_text(text:string): string {
 		if(blocks[i].header.hasOwnProperty("nodoc"))
 			continue;
 		if(blocks[i].header.name)
-			md += "\n## " + blocks[i].header.name + "\n";
+			md += "\n### " + blocks[i].header.name + "\n";
 		if(blocks[i].header.description)
 			md += blocks[i].header.description + "\n";
 		md += "```typescript\n";
@@ -57,7 +57,8 @@ function parse_header(text:string): any {
 		if(match[1] === "description")
 		result[match[1]] = result[match[1]].replace(tex_regex, function(_match, content) {
 			let formula = encodeURIComponent(content);
-			return "<img src=\"https://render.githubusercontent.com/render/math?math=" + formula + "\">";
+			let title = content.replace(/\n/g, "");
+			return "![$" + title + "$](http://latex.codecogs.com/png.latex?" + formula + ") ";
 		});
 	}
 	return result;

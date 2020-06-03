@@ -1,3 +1,6 @@
+src/*.js
+src/modules/*.js
+
 # Logs
 logs
 *.log
