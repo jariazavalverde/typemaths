@@ -24,38 +24,3 @@ export type RealFunction = (x:number) => number;
  * 
  **/
 export const TypeMaths:any = {};
-module.exports = TypeMaths;
-
-/**
- * @name Load a module
- * @id load
- * @type function
- * 
- * @description
- * Loads a TypeMaths module from a file.
- * 
- **/
-TypeMaths.load = function(path:string): void {
-    const module = require(path);
-    TypeMaths.extend(module);
-};
-
-/**
- * @name Extend global object
- * @id extend
- * @type function
- * 
- * @description
- * Adds a new module to the global object.
- * 
- **/
-TypeMaths.extend = function(module:any): void {
-    let methods = {};
-    if(module.__name)
-        TypeMaths[module.__name] = methods;
-    if(module.__alias)
-        TypeMaths[module.__alias] = methods;
-    for(let prop in module)
-        if(prop.substring(2) !== "__" && module.hasOwnProperty(prop))
-            methods[prop] = module[prop];
-};

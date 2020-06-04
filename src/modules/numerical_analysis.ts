@@ -1,4 +1,4 @@
-import {RealFunction} from "../typemaths";
+import {RealFunction} from "../typemaths.ts";
 
 /**
  * @name Numerical analysis
@@ -13,10 +13,8 @@ import {RealFunction} from "../typemaths";
  * This module defines numerical algorithms to solve numerical problems.
  * 
  * @example
- * const $ = require("typemaths");
- * $.load("typemaths/modules/numerical_analysis.js")($);
- * const {newtonRaphson, iterate, limit} = $.na;
- * let f = newtonRaphson(x => x*x, x => 2*x);
+ * import {newtonRaphson, iterate, limit} from "/path/to/numerical_analysis.ts";
+ * let f = newtonRaphson((x:number) => x*x, (x:number) => 2*x);
  * let gen = iterate(f);
  * console.log(limit(0.0005, gen(1))); // 0.00048828125
  * console.log(limit(0.000005, gen(1))); // 0.000003814697265625

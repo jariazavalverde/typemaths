@@ -1,18 +1,14 @@
+import {readFileStr, writeFileStr} from "https://deno.land/std/fs/mod.ts";
+
 const tm_regex:RegExp = /\/\*\*((?:[^*]|\*[^*]|\*\*[^/])*)\*\*\/((?:[^/]|\/[^*]|\/\*[^*])*)/gm;
 const header_regex:RegExp = /@([a-z]+)([^@]*)/gm;
 const tex_regex:RegExp = /\$((?:[^$\\]|\\\$|\\)*)\$/gm;
 
 // Parses a TypeMaths file and generates the Markdown files.
 function render_file(path:string, output:string): void {
-	const fs = require("fs");
-	fs.readFile(path, "utf8", function(err, data) {
-		if(err)
-			return console.log(err);
-		const content = render_text(data);
-		fs.writeFile(output, content, function (err) {
-			if(err)
-				return console.log(err);
-		  });
+	readFileStr(path).then((text:string) => {
+		const content = render_text(text);
+		writeFileStr(output, content);
 	});
 }
 
@@ -49,7 +45,7 @@ function render_text(text:string): string {
 }
 
 function parse_text(text:string): Array<any> {
-	var match:RegExpExecArray;
+	var match:RegExpExecArray|null;
 	var result:Array<any> = [];
 	while((match = tm_regex.exec(text)) !== null) {
 		let header:any = parse_header(match[1]);
@@ -62,14 +58,14 @@ function parse_text(text:string): Array<any> {
 }
 
 function parse_header(text:string): any {
-	let match:RegExpExecArray;
+	let match:RegExpExecArray|null;
 	let result:any = {};
 	let lines = text.split("\n").map(x => x.replace("*", "").trim());
 	let clean_text = lines.join("\n");
 	while((match = header_regex.exec(clean_text)) !== null) {
 		result[match[1]] = match[2].trim();
 		if(match[1] === "introduction" || match[1] === "description")
-			result[match[1]] = result[match[1]].replace(tex_regex, function(_match, content) {
+			result[match[1]] = result[match[1]].replace(tex_regex, function(_match:any, content:string) {
 				let formula = encodeURIComponent(content);
 				let title = content.replace(/\n/g, "");
 				return "![$" + title + "$](http://latex.codecogs.com/png.latex?" + formula + ") ";
@@ -81,5 +77,5 @@ function parse_header(text:string): any {
 }
 
 // Do it!
-render_file("typemaths.ts", "../doc/typemaths.md");
-render_file("modules/numerical_analysis.ts", "../doc/numerical_analysis.md");
+render_file("./typemaths.ts", "../doc/typemaths.md");
+render_file("./modules/numerical_analysis.ts", "../doc/numerical_analysis.md");
