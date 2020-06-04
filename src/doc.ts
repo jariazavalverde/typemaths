@@ -23,13 +23,27 @@ function render_text(text:string): string {
 	for(let i = 0; i < blocks.length; i++) {
 		if(blocks[i].header.hasOwnProperty("nodoc"))
 			continue;
-		if(blocks[i].header.name)
-			md += "\n### " + blocks[i].header.name + "\n";
+		if(blocks[i].header.name) {
+			if(i === 0 && blocks[i].header.type === "module")
+				md += "\n# " + blocks[i].header.name + "\n";
+			else
+				md += "\n### " + blocks[i].header.name + "\n";
+		}
+		if(blocks[i].header.introduction)
+			md += blocks[i].header.introduction + "\n\n";
 		if(blocks[i].header.description)
 			md += blocks[i].header.description + "\n";
-		md += "```typescript\n";
-		md += blocks[i].body;
-		md += "\n```\n";
+		if(i === 0 && blocks[i].header.type === "module") {
+			if(blocks[i].header.example) {
+				md += "```typescript\n";
+				md += blocks[i].header.example;
+				md += "\n```\n";
+			}
+		} else {
+			md += "```typescript\n";
+			md += blocks[i].body;
+			md += "\n```\n";
+		}
 	}
 	return md;
 }
@@ -54,15 +68,18 @@ function parse_header(text:string): any {
 	let clean_text = lines.join("\n");
 	while((match = header_regex.exec(clean_text)) !== null) {
 		result[match[1]] = match[2].trim();
-		if(match[1] === "description")
-		result[match[1]] = result[match[1]].replace(tex_regex, function(_match, content) {
-			let formula = encodeURIComponent(content);
-			let title = content.replace(/\n/g, "");
-			return "![$" + title + "$](http://latex.codecogs.com/png.latex?" + formula + ") ";
-		});
+		if(match[1] === "introduction" || match[1] === "description")
+			result[match[1]] = result[match[1]].replace(tex_regex, function(_match, content) {
+				let formula = encodeURIComponent(content);
+				let title = content.replace(/\n/g, "");
+				return "![$" + title + "$](http://latex.codecogs.com/png.latex?" + formula + ") ";
+			});
+		if(match[1] === "introduction")
+			result[match[1]] = "> " + result[match[1]].replace(/\n/g, "\n> ");
 	}
 	return result;
 }
 
 // Do it!
+render_file("typemaths.ts", "../doc/typemaths.md");
 render_file("modules/numerical_analysis.ts", "../doc/numerical_analysis.md");

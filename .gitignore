@@ -1,5 +1,6 @@
 src/*.js
 src/modules/*.js
+local
 
 # Logs
 logs

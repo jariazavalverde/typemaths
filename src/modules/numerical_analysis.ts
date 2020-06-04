@@ -1,16 +1,37 @@
-import {TypeMaths} from "../typemaths";
+import {RealFunction} from "../typemaths";
 
 /**
- * @name
- * Newton–Raphson method
+ * @name Numerical analysis
+ * @id numerical_analysis
+ * @type module
  * 
- * @id
- * newton_raphson
- * 
- * @test
- * limit(0.0005, TypeMaths.na.newton_raphson(x=>x*x, x=>2*x), 1.0);
+ * @introduction
+ * **Numerical analysis** is the study of algorithms that use numerical
+ * approximation for the problems of mathematical analysis.
  * 
  * @description
+ * This module defines numerical algorithms to solve numerical problems.
+ * 
+ * @example
+ * const $ = require("typemaths");
+ * $.load("typemaths/modules/numerical_analysis.js")($);
+ * const {newtonRaphson, iterate, limit} = $.na;
+ * let f = newtonRaphson(x => x*x, x => 2*x);
+ * let gen = iterate(f);
+ * console.log(limit(0.0005, gen(1))); // 0.00048828125
+ * console.log(limit(0.000005, gen(1))); // 0.000003814697265625
+ * 
+ **/
+export const __name = "numerical_analysis";
+export const __alias = "na";
+
+/**
+ * @name Newton–Raphson method
+ * @id newtonRaphson
+ * @category numerical method
+ * @type function
+ * 
+ * @introduction
  * **Newton–Raphson method** is a root-finding algorithm which produces
  * successively better approximations to the roots of a real-valued function.
  * 
@@ -24,46 +45,53 @@ import {TypeMaths} from "../typemaths";
  * is a better approximation of the root than $x_n$. The process is repeated
  * until a sufficiently precise value is reached.
  * 
+ * @description
+ * `newtonRaphson(f, df)` returns a function that given a real value $x_i$,
+ * returns the next approximation $x_{i+1}$ using the Newton-Raphson method.
+ * 
  **/
-function newton_raphson(f:(x:number) => number, df:(x:number) => number): (x0:number) => Generator<number,never,number> {
-	return function*(x0:number) {
-		let xi:number = x0;
-		while(true) {
-			yield xi;
-			xi = xi - f(xi)/df(xi);
-		}
-	};
+export function newtonRaphson(f:RealFunction, df:RealFunction): RealFunction {
+    return x => x - f(x)/df(x);
 }
 
 /**
- * @name
- * limit
- * 
- * @id
- * limit
+ * @name All the iterations of a function
+ * @id iterate
+ * @category consumer
+ * @type function
  * 
  * @description
- * Given a limit $\varepsilon$, `limit` yields the result of applying a
- * single-variable function $f$ until $|x_{n+1} - x_n| \leq \varepsilon$ holds.
+ * `iterate(f, x)` returns an infinite list (a generator) of repeated
+ * applications of a real function `f` to a value `x`. 
  * 
  **/
-function limit(epsilon:number, gen:Generator<number,never,number>): number {
-	var xi:number, xj:number;
-	xj = gen.next().value;
-	do {
-		xi = xj;
-		xj = gen.next().value;
-	} while(Math.abs(xj-xi) > epsilon);
-	return xj;
+export function iterate(f:RealFunction): (x:number) => Generator<number,never,number> {
+    return function*(x0:number) {
+        let xi:number = x0;
+        while(true) {
+            yield xi;
+            xi = f(xi);
+        }
+    };
 }
 
 /**
- * @nodoc
+ * @name Limit
+ * @id limit
+ * @category consumer
+ * @type function
+ * 
  * @description
- * Extends TypeMaths global object.
+ * Returns the first element of a generator within $\varepsilon$ of its
+ * predecessor.
  * 
  **/
-TypeMaths.extend("numerical_analysis", "na", {
-	newton_raphson: newton_raphson,
-	limit: limit
-});
+export function limit(epsilon:number, gen:Generator<number,never,number>): number {
+    var xi:number, xj:number;
+    xj = gen.next().value;
+    do {
+        xi = xj;
+        xj = gen.next().value;
+    } while(Math.abs(xj-xi) > epsilon);
+    return xj;
+}
