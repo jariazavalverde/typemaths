@@ -35,7 +35,7 @@ export function id<A>(x:A): A {
 > the function ![$g$](http://latex.codecogs.com/png.latex?g)  is applied to the result of applying the function ![$f$](http://latex.codecogs.com/png.latex?f)  to
 > ![$x$](http://latex.codecogs.com/png.latex?x) . That is, the functions ![$f:X \rightarrow Y$](http://latex.codecogs.com/png.latex?f%3AX%20%5Crightarrow%20Y)  and ![$g:Y \rightarrow Z$](http://latex.codecogs.com/png.latex?g%3AY%20%5Crightarrow%20Z)  are
 > composed to yield a function that maps ![$x$](http://latex.codecogs.com/png.latex?x)  in ![$X$](http://latex.codecogs.com/png.latex?X)  to ![$g(f(x))$](http://latex.codecogs.com/png.latex?g(f(x)))  in ![$Z$](http://latex.codecogs.com/png.latex?Z) . The
-> resulting composite function is denoted ![$g \circ f: X \rightarrow Z$](http://latex.codecogs.com/png.latex?g%E2%80%89%5Ccirc%E2%80%89f%3A%20X%20%5Crightarrow%20Z) .
+> resulting composite function is denoted ![$g \circ f : X \rightarrow Z$](http://latex.codecogs.com/png.latex?g%20%5Ccirc%E2%80%89f%20%3A%20X%20%5Crightarrow%20Z) .
 
 `compose(g, f)` returns the composite function ![$g \circ f$](http://latex.codecogs.com/png.latex?g%20%5Ccirc%20f) .
 ```typescript
@@ -58,8 +58,8 @@ export function flip<A,B,C>(f:(x:A, y:B) => C): (y:B, x:A) => C {
 > with a single argument.
 
 `curryN(f)` converts an uncurried function of `N` arguments to a curried
-function. `uncurryN(f)` converts a curried function to a uncurried function
-of `N` arguments.
+function. `uncurryN(f)` converts a curried function  of `N` arguments to an
+uncurried function.
 ```typescript
 export function curry2<A,B,C>(f:(x:A, y:B) => C): (x:A) => (y:B) => C {
     return x => y => f(x,y);

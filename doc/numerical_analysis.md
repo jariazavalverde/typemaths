@@ -5,14 +5,34 @@
 
 This module defines numerical algorithms to solve numerical problems.
 ```typescript
-import { RealFunction } from "/path/to/types.ts";
-import { newtonRaphson, iterate, limit } from "/path/to/numerical_analysis.ts";
+numerical_analysis.ts
+```
 
-let f:RealFunction = Math.log;
-let df:RealFunction = x => 1/x;
-let gen = iterate(newtonRaphson(f, df));
-console.log(limit(1e-3, gen(2))); // 0.9999999999719384
-console.log(limit(1e-6, gen(2))); // 1
+### Bisection method
+> The **bisection method** is a root-finding method that applies to any
+> continuous functions for which one knows two values with opposite signs.
+> The method consists of repeatedly bisecting the interval defined by these
+> values and then selecting the subinterval in which the function changes
+> sign, and therefore must contain a root.
+
+`bisection(f)` returns a function that given a real interval `[a,b]` (a
+tuple), returns the next approximations using the bisection method.
+```typescript
+export function bisection(f:RealFunction): (interval:[number,number]) => Generator<number> {
+    const mean = ([a,b]:[number,number]) => (a+b)/2;
+    return compose(
+        curry2(map)(mean),
+        curry2(iterate)(([a,b]:[number,number]) => {
+            let c = mean([a,b]), fc = f(c);
+            if(fc === 0)
+                return [c,c];
+            else if(Math.sign(fc) === Math.sign(f(a)))
+                return [c,b];
+            else
+                return [a,c];
+        })
+    );
+}
 ```
 
 ### Newton–Raphson method
@@ -30,25 +50,12 @@ console.log(limit(1e-6, gen(2))); // 1
 > until a sufficiently precise value is reached.
 
 `newtonRaphson(f, df)` returns a function that given a real value ![$x_i$](http://latex.codecogs.com/png.latex?x_i) ,
-returns the next approximation ![$x_{i+1}$](http://latex.codecogs.com/png.latex?x_%7Bi%2B1%7D)  using the Newton-Raphson method.
+returns the next approximations using the Newton-Raphson method.
 ```typescript
-export function newtonRaphson(f:RealFunction, df:RealFunction): RealFunction {
-    return (x:number) => x - f(x)/df(x);
-}
-```
-
-### All the iterations of a function
-`iterate(f, x)` returns an infinite list (a generator) of repeated
-applications of a function `f` to a value `x`.
-```typescript
-export function iterate<A>(f:(x:A) => A): (x:A) => Generator<A,never,A> {
-    return function*(x0:A) {
-        let xi:A = x0;
-        while(true) {
-            yield xi;
-            xi = f(xi);
-        }
-    };
+export function newtonRaphson(f:RealFunction, df:RealFunction): (x:number) => Generator<number> {
+    return curry2(iterate)(
+        (x:number) => x - f(x)/df(x)
+    );
 }
 ```
 
@@ -56,7 +63,7 @@ export function iterate<A>(f:(x:A) => A): (x:A) => Generator<A,never,A> {
 Returns the first element of a generator within ![$\varepsilon$](http://latex.codecogs.com/png.latex?%5Cvarepsilon)  of its
 predecessor.
 ```typescript
-export function limit(epsilon:number, gen:Generator<number,never,number>): number {
+export function limit(epsilon:number, gen:Generator<number>): number {
     var xi:number, xj:number;
     xj = gen.next().value;
     do {

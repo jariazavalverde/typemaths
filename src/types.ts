@@ -12,7 +12,7 @@
  * 
  **/
 export const __name = "types";
-export const __alias = "types";
+export const __alias = "ty";
 
 /**
  * @name Real-valued functions

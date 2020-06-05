@@ -24,7 +24,7 @@
  * 
  **/
 export const __name = "combinators";
-export const __alias = "combinators";
+export const __alias = "com";
 
 /**
  * @name Identity function
@@ -55,7 +55,7 @@ export function id<A>(x:A): A {
  * the function $g$ is applied to the result of applying the function $f$ to
  * $x$. That is, the functions $f:X \rightarrow Y$ and $g:Y \rightarrow Z$ are
  * composed to yield a function that maps $x$ in $X$ to $g(f(x))$ in $Z$. The
- * resulting composite function is denoted $g \circ f: X \rightarrow Z$.
+ * resulting composite function is denoted $g \circ f : X \rightarrow Z$.
  * 
  * @description
  * `compose(g, f)` returns the composite function $g \circ f$.
@@ -90,8 +90,8 @@ export function flip<A,B,C>(f:(x:A, y:B) => C): (y:B, x:A) => C {
  * 
  * @description
  * `curryN(f)` converts an uncurried function of `N` arguments to a curried
- * function. `uncurryN(f)` converts a curried function to a uncurried function
- * of `N` arguments.
+ * function. `uncurryN(f)` converts a curried function  of `N` arguments to an
+ * uncurried function.
  * 
  **/
 export function curry2<A,B,C>(f:(x:A, y:B) => C): (x:A) => (y:B) => C {

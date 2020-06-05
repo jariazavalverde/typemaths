@@ -1,9 +1,12 @@
 import { RealFunction } from "./types.ts";
+import { map, iterate } from "./generators.ts";
+import { compose, curry2 } from "./combinators.ts";
 
 /**
  * @name Numerical analysis
  * @id numerical_analysis
  * @type module
+ * @example numerical_analysis.ts
  * 
  * @introduction
  * **Numerical analysis** is the study of algorithms that use numerical
@@ -12,19 +15,42 @@ import { RealFunction } from "./types.ts";
  * @description
  * This module defines numerical algorithms to solve numerical problems.
  * 
- * @example
- * import { RealFunction } from "/path/to/types.ts";
- * import { newtonRaphson, iterate, limit } from "/path/to/numerical_analysis.ts";
- * 
- * let f:RealFunction = Math.log;
- * let df:RealFunction = x => 1/x;
- * let gen = iterate(newtonRaphson(f, df));
- * console.log(limit(1e-3, gen(2))); // 0.9999999999719384
- * console.log(limit(1e-6, gen(2))); // 1
- * 
  **/
 export const __name = "numerical_analysis";
 export const __alias = "na";
+
+/**
+ * @name Bisection method
+ * @id bisecion
+ * @type function
+ * 
+ * @introduction
+ * The **bisection method** is a root-finding method that applies to any
+ * continuous functions for which one knows two values with opposite signs.
+ * The method consists of repeatedly bisecting the interval defined by these
+ * values and then selecting the subinterval in which the function changes
+ * sign, and therefore must contain a root.
+ * 
+ * @description
+ * `bisection(f)` returns a function that given a real interval `[a,b]` (a
+ * tuple), returns the next approximations using the bisection method.
+ * 
+ **/
+export function bisection(f:RealFunction): (interval:[number,number]) => Generator<number> {
+    const mean = ([a,b]:[number,number]) => (a+b)/2;
+    return compose(
+        curry2(map)(mean),
+        curry2(iterate)(([a,b]:[number,number]) => {
+            let c = mean([a,b]), fc = f(c);
+            if(fc === 0)
+                return [c,c];
+            else if(Math.sign(fc) === Math.sign(f(a)))
+                return [c,b];
+            else
+                return [a,c];
+        })
+    );
+}
 
 /**
  * @name Newton–Raphson method
@@ -47,31 +73,13 @@ export const __alias = "na";
  * 
  * @description
  * `newtonRaphson(f, df)` returns a function that given a real value $x_i$,
- * returns the next approximation $x_{i+1}$ using the Newton-Raphson method.
+ * returns the next approximations using the Newton-Raphson method.
  * 
  **/
-export function newtonRaphson(f:RealFunction, df:RealFunction): RealFunction {
-    return (x:number) => x - f(x)/df(x);
-}
-
-/**
- * @name All the iterations of a function
- * @id iterate
- * @type function
- * 
- * @description
- * `iterate(f, x)` returns an infinite list (a generator) of repeated
- * applications of a function `f` to a value `x`. 
- * 
- **/
-export function iterate<A>(f:(x:A) => A): (x:A) => Generator<A,never,A> {
-    return function*(x0:A) {
-        let xi:A = x0;
-        while(true) {
-            yield xi;
-            xi = f(xi);
-        }
-    };
+export function newtonRaphson(f:RealFunction, df:RealFunction): (x:number) => Generator<number> {
+    return curry2(iterate)(
+        (x:number) => x - f(x)/df(x)
+    );
 }
 
 /**
@@ -84,7 +92,7 @@ export function iterate<A>(f:(x:A) => A): (x:A) => Generator<A,never,A> {
  * predecessor.
  * 
  **/
-export function limit(epsilon:number, gen:Generator<number,never,number>): number {
+export function limit(epsilon:number, gen:Generator<number>): number {
     var xi:number, xj:number;
     xj = gen.next().value;
     do {
