@@ -40,7 +40,7 @@ export const __alias = "combinators";
  * Identity function.
  * 
  **/
-export function id<X>(x:X): X {
+export function id<A>(x:A): A {
     return x;
 }
 
@@ -55,12 +55,25 @@ export function id<X>(x:X): X {
  * the function $g$ is applied to the result of applying the function $f$ to
  * $x$. That is, the functions $f:X \rightarrow Y$ and $g:Y \rightarrow Z$ are
  * composed to yield a function that maps $x$ in $X$ to $g(f(x))$ in $Z$. The
- * resulting composite function is denoted $g \circle f:X \rightarrow Z$.
+ * resulting composite function is denoted $g \circ f:X \rightarrow Z$.
  * 
  * @description
- * `compose(g, f)` returns the composite function $g \circle f$.
+ * `compose(g, f)` returns the composite function $g \circ f$.
  * 
  **/
-export function compose<X,Y,Z>(g:(y:Y) => Z, f:(x:X) => Y): (x:X) => Z {
+export function compose<A,B,C>(g:(y:B) => C, f:(x:A) => B): (x:A) => C {
     return x => g(f(x));
+}
+
+/**
+ * @name Flip arguments
+ * @id flip
+ * @type function
+ * 
+ * @description
+ * `flip(f)` takes its two arguments in the reverse order of `f`.
+ * 
+ **/
+export function flip<A,B,C>(f:(x:A, y:B) => C): (y:B, x:A) => C {
+    return (y,x) => f(x,y);
 }

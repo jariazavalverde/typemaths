@@ -24,7 +24,7 @@ console.log(h(5)); // 12
 
 Identity function.
 ```typescript
-export function id<X>(x:X): X {
+export function id<A>(x:A): A {
     return x;
 }
 ```
@@ -35,11 +35,19 @@ export function id<X>(x:X): X {
 > the function ![$g$](http://latex.codecogs.com/png.latex?g)  is applied to the result of applying the function ![$f$](http://latex.codecogs.com/png.latex?f)  to
 > ![$x$](http://latex.codecogs.com/png.latex?x) . That is, the functions ![$f:X \rightarrow Y$](http://latex.codecogs.com/png.latex?f%3AX%20%5Crightarrow%20Y)  and ![$g:Y \rightarrow Z$](http://latex.codecogs.com/png.latex?g%3AY%20%5Crightarrow%20Z)  are
 > composed to yield a function that maps ![$x$](http://latex.codecogs.com/png.latex?x)  in ![$X$](http://latex.codecogs.com/png.latex?X)  to ![$g(f(x))$](http://latex.codecogs.com/png.latex?g(f(x)))  in ![$Z$](http://latex.codecogs.com/png.latex?Z) . The
-> resulting composite function is denoted ![$g \circle f:X \rightarrow Z$](http://latex.codecogs.com/png.latex?g%E2%80%89%5Ccircle%E2%80%89f%3AX%20%5Crightarrow%20Z) .
+> resulting composite function is denoted ![$g \circ f:X \rightarrow Z$](http://latex.codecogs.com/png.latex?g%E2%80%89%5Ccirc%E2%80%89f%3AX%20%5Crightarrow%20Z) .
 
-`compose(g, f)` returns the composite function ![$g \circle f$](http://latex.codecogs.com/png.latex?g%20%5Ccircle%20f) .
+`compose(g, f)` returns the composite function ![$g \circ f$](http://latex.codecogs.com/png.latex?g%20%5Ccirc%20f) .
 ```typescript
-export function compose<X,Y,Z>(g:(y:Y) => Z, f:(x:X) => Y): (x:X) => Z {
+export function compose<A,B,C>(g:(y:B) => C, f:(x:A) => B): (x:A) => C {
     return x => g(f(x));
+}
+```
+
+### Flip arguments
+`flip(f)` takes its two arguments in the reverse order of `f`.
+```typescript
+export function flip<A,B,C>(f:(x:A, y:B) => C): (y:B, x:A) => C {
+    return (y,x) => f(x,y);
 }
 ```

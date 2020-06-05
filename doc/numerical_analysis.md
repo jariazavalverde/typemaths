@@ -39,11 +39,11 @@ export function newtonRaphson(f:RealFunction, df:RealFunction): RealFunction {
 
 ### All the iterations of a function
 `iterate(f, x)` returns an infinite list (a generator) of repeated
-applications of a real function `f` to a value `x`.
+applications of a function `f` to a value `x`.
 ```typescript
-export function iterate(f:RealFunction): (x:number) => Generator<number,never,number> {
-    return function*(x0:number) {
-        let xi:number = x0;
+export function iterate<A>(f:(x:A) => A): (x:A) => Generator<A,never,A> {
+    return function*(x0:A) {
+        let xi:A = x0;
         while(true) {
             yield xi;
             xi = f(xi);
