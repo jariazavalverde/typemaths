@@ -29,7 +29,6 @@ export const __alias = "na";
 /**
  * @name Newton–Raphson method
  * @id newtonRaphson
- * @category numerical method
  * @type function
  * 
  * @introduction
@@ -58,7 +57,6 @@ export function newtonRaphson(f:RealFunction, df:RealFunction): RealFunction {
 /**
  * @name All the iterations of a function
  * @id iterate
- * @category consumer
  * @type function
  * 
  * @description
@@ -79,7 +77,6 @@ export function iterate(f:RealFunction): (x:number) => Generator<number,never,nu
 /**
  * @name Limit
  * @id limit
- * @category consumer
  * @type function
  * 
  * @description
