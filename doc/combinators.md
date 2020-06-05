@@ -35,7 +35,7 @@ export function id<A>(x:A): A {
 > the function ![$g$](http://latex.codecogs.com/png.latex?g)  is applied to the result of applying the function ![$f$](http://latex.codecogs.com/png.latex?f)  to
 > ![$x$](http://latex.codecogs.com/png.latex?x) . That is, the functions ![$f:X \rightarrow Y$](http://latex.codecogs.com/png.latex?f%3AX%20%5Crightarrow%20Y)  and ![$g:Y \rightarrow Z$](http://latex.codecogs.com/png.latex?g%3AY%20%5Crightarrow%20Z)  are
 > composed to yield a function that maps ![$x$](http://latex.codecogs.com/png.latex?x)  in ![$X$](http://latex.codecogs.com/png.latex?X)  to ![$g(f(x))$](http://latex.codecogs.com/png.latex?g(f(x)))  in ![$Z$](http://latex.codecogs.com/png.latex?Z) . The
-> resulting composite function is denoted ![$g \circ f:X \rightarrow Z$](http://latex.codecogs.com/png.latex?g%E2%80%89%5Ccirc%E2%80%89f%3AX%20%5Crightarrow%20Z) .
+> resulting composite function is denoted ![$g \circ f: X \rightarrow Z$](http://latex.codecogs.com/png.latex?g%E2%80%89%5Ccirc%E2%80%89f%3A%20X%20%5Crightarrow%20Z) .
 
 `compose(g, f)` returns the composite function ![$g \circ f$](http://latex.codecogs.com/png.latex?g%20%5Ccirc%20f) .
 ```typescript
@@ -49,5 +49,55 @@ export function compose<A,B,C>(g:(y:B) => C, f:(x:A) => B): (x:A) => C {
 ```typescript
 export function flip<A,B,C>(f:(x:A, y:B) => C): (y:B, x:A) => C {
     return (y,x) => f(x,y);
+}
+```
+
+### Currying
+> **Currying** is the technique of translating the evaluation of a function
+> that takes multiple arguments into evaluating a sequence of functions, each
+> with a single argument.
+
+`curryN(f)` converts an uncurried function of `N` arguments to a curried
+function. `uncurryN(f)` converts a curried function to a uncurried function
+of `N` arguments.
+```typescript
+export function curry2<A,B,C>(f:(x:A, y:B) => C): (x:A) => (y:B) => C {
+    return x => y => f(x,y);
+}
+
+export function curry3<A,B,C,D>(f:(x:A, y:B, z:C) => D): (x:A) => (y:B) => (z:C) => D {
+    return x => y => z => f(x,y,z);
+}
+
+export function curry4<A,B,C,D,E>(f:(x:A, y:B, z:C, w:D) => E): (x:A) => (y:B) => (z:C) => (w:D) => E {
+    return x => y => z => w => f(x,y,z,w);
+}
+
+export function curry5<A,B,C,D,E,F>(f:(x:A, y:B, z:C, w:D, u:E) => F): (x:A) => (y:B) => (z:C) => (w:D) => (u:E) => F {
+    return x => y => z => w => u => f(x,y,z,w,u);
+}
+
+export function curry6<A,B,C,D,E,F,G>(f:(x:A, y:B, z:C, w:D, u:E, v:F) => G): (x:A) => (y:B) => (z:C) => (w:D) => (u:E) => (v:F) => G {
+    return x => y => z => w => u => v => f(x,y,z,w,u,v);
+}
+
+export function uncurry2<A,B,C>(f:((x:A) => (y:B) => C)): (x:A, y:B) => C {
+    return (x,y) => f(x)(y);
+}
+
+export function uncurry3<A,B,C,D>(f:((x:A) => (y:B) => (z:C) => D)): (x:A, y:B, z:C) => D {
+    return (x,y,z) => f(x)(y)(z);
+}
+
+export function uncurry4<A,B,C,D,E>(f:((x:A) => (y:B) => (z:C) => (w:D) => E)): (x:A, y:B, z:C, w:D) => E {
+    return (x,y,z,w) => f(x)(y)(z)(w);
+}
+
+export function uncurry5<A,B,C,D,E,F>(f:((x:A) => (y:B) => (z:C) => (w:D) => (u:E) => F)): (x:A, y:B, z:C, w:D, u:E) => F {
+    return (x,y,z,w,u) => f(x)(y)(z)(w)(u);
+}
+
+export function uncurry6<A,B,C,D,E,F,G>(f:((x:A) => (y:B) => (z:C) => (w:D) => (u:E) => (v:F) => G)): (x:A, y:B, z:C, w:D, u:E, v:F) => G {
+    return (x,y,z,w,u,v) => f(x)(y)(z)(w)(u)(v);
 }
 ```
