@@ -1,5 +1,8 @@
-import {newtonRaphson, iterate, limit} from "../src/modules/numerical_analysis.ts";
+import { RealFunction } from "../src/typemaths.ts";
+import { newtonRaphson, iterate, limit } from "../src/modules/numerical_analysis.ts";
 
-let f = newtonRaphson((x:number) => x*x, (x:number) => 2*x);
-let gen = iterate(f);
-console.log(limit(0.000005, gen(1)));
+let f:RealFunction = Math.log;
+let df:RealFunction = x => 1/x;
+let gen = iterate(newtonRaphson(f, df));
+console.log(limit(1e-3, gen(2))); // 0.9999999999719384
+console.log(limit(1e-6, gen(2))); // 1

@@ -13,11 +13,14 @@ import {RealFunction} from "../typemaths.ts";
  * This module defines numerical algorithms to solve numerical problems.
  * 
  * @example
- * import {newtonRaphson, iterate, limit} from "/path/to/numerical_analysis.ts";
- * let f = newtonRaphson((x:number) => x*x, (x:number) => 2*x);
- * let gen = iterate(f);
- * console.log(limit(0.0005, gen(1))); // 0.00048828125
- * console.log(limit(0.000005, gen(1))); // 0.000003814697265625
+ * import { RealFunction } from "../src/typemaths.ts";
+ * import { newtonRaphson, iterate, limit } from "../src/modules/numerical_analysis.ts";
+ * 
+ * let f:RealFunction = Math.log;
+ * let df:RealFunction = x => 1/x;
+ * let gen = iterate(newtonRaphson(f, df));
+ * console.log(limit(1e-3, gen(2))); // 0.9999999999719384
+ * console.log(limit(1e-6, gen(2))); // 1
  * 
  **/
 export const __name = "numerical_analysis";
@@ -49,7 +52,7 @@ export const __alias = "na";
  * 
  **/
 export function newtonRaphson(f:RealFunction, df:RealFunction): RealFunction {
-    return x => x - f(x)/df(x);
+    return (x:number) => x - f(x)/df(x);
 }
 
 /**
