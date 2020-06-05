@@ -1,4 +1,4 @@
-import {RealFunction} from "../typemaths.ts";
+import { RealFunction } from "./types.ts";
 
 /**
  * @name Numerical analysis
@@ -13,8 +13,8 @@ import {RealFunction} from "../typemaths.ts";
  * This module defines numerical algorithms to solve numerical problems.
  * 
  * @example
- * import { RealFunction } from "../src/typemaths.ts";
- * import { newtonRaphson, iterate, limit } from "../src/modules/numerical_analysis.ts";
+ * import { RealFunction } from "/path/to/types.ts";
+ * import { newtonRaphson, iterate, limit } from "/path/to/numerical_analysis.ts";
  * 
  * let f:RealFunction = Math.log;
  * let df:RealFunction = x => 1/x;

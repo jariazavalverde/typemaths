@@ -1,4 +1,5 @@
-import {readFileStr, writeFileStr} from "https://deno.land/std/fs/mod.ts";
+// Usage: deno run --allow-read --allow-write --unstable doc.ts
+import { readFileStr, writeFileStr } from "https://deno.land/std/fs/mod.ts";
 
 const tm_regex:RegExp = /\/\*\*((?:[^*]|\*[^*]|\*\*[^/])*)\*\*\/((?:[^/]|\/[^*]|\/\*[^*])*)/gm;
 const header_regex:RegExp = /@([a-z]+)([^@]*)/gm;
@@ -77,5 +78,5 @@ function parse_header(text:string): any {
 }
 
 // Do it!
-render_file("./typemaths.ts", "../doc/typemaths.md");
-render_file("./modules/numerical_analysis.ts", "../doc/numerical_analysis.md");
+render_file("../src/types.ts", "../doc/types.md");
+render_file("../src/numerical_analysis.ts", "../doc/numerical_analysis.md");
