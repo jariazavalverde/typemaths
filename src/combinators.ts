@@ -70,6 +70,24 @@ export function flip<A,B,C>(f:(x:A, y:B) => C): (y:B, x:A) => C {
 }
 
 /**
+ * @name Access to tuple elements
+ * @id fst / snd
+ * @type function
+ * 
+ * @description
+ * `fst(t)` extracts the first component of a pair `t`.
+ * `snd(t)` extracts the second component of a pair `t`.
+ * 
+ **/
+export function fst<A,B>(t:[A,B]): A {
+    return t[0];
+}
+
+export function snd<A,B>(t:[A,B]): B {
+    return t[1];
+}
+
+/**
  * @name Currying
  * @id curry* / uncurry*
  * @type function

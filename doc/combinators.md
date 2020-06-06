@@ -52,6 +52,19 @@ export function flip<A,B,C>(f:(x:A, y:B) => C): (y:B, x:A) => C {
 }
 ```
 
+### Access to tuple elements
+`fst(t)` extracts the first component of a pair `t`.
+`snd(t)` extracts the second component of a pair `t`.
+```typescript
+export function fst<A,B>(t:[A,B]): A {
+    return t[0];
+}
+
+export function snd<A,B>(t:[A,B]): B {
+    return t[1];
+}
+```
+
 ### Currying
 > **Currying** is the technique of translating the evaluation of a function
 > that takes multiple arguments into evaluating a sequence of functions, each

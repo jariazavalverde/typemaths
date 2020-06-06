@@ -1,6 +1,6 @@
-import { RealFunction } from "./types.ts";
+import { RealFunction, RealValuedFunction } from "./types.ts";
 import { map, iterate } from "./generators.ts";
-import { compose, curry2 } from "./combinators.ts";
+import { snd, compose, curry2 } from "./combinators.ts";
 
 /**
  * @name Numerical analysis
@@ -79,6 +79,35 @@ export function bisection(f:RealFunction): (interval:[number,number]) => Generat
 export function newtonRaphson(f:RealFunction, df:RealFunction): (x:number) => Generator<number> {
     return curry2(iterate)(
         (x:number) => x - f(x)/df(x)
+    );
+}
+
+/**
+ * @name Secant method
+ * @id secant
+ * @type function
+ * 
+ * @introduction
+ * The **secant method** is a root-finding algorithm that uses a succession of
+ * roots of secant lines to better approximate a root of a function f. The
+ * secant method is defined by the fllowing recurrence relation:
+ * 
+ * $x_{n}=x_{n-1}-f(x_{n-1}){\frac {x_{n-1}-x_{n-2}}{f(x_{n-1})-f(x_{n-2})}}$
+ * 
+ * @description
+ * `secant(f)` returns a function that given two initial values `[x0,x1]` (a
+ * tuple), returns the next approximations using the secant method.
+ * 
+ **/
+export function secant(f:RealFunction): (inital:[number,number]) => Generator<number> {
+    return compose(
+        curry2(map)(<RealValuedFunction<[number,number]>>snd),
+        curry2(iterate)(
+            ([x0,x1]:[number,number]) => {
+                let x2 = x0-f(x0)*((x0-x1)/(f(x0)-f(x1)));
+                return [x1,x2];
+            }
+        )
     );
 }
 

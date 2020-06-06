@@ -6,22 +6,28 @@
 This module defines numerical algorithms to solve numerical problems.
 ```typescript
 import { RealFunction } from "../src/types.ts";
-import { bisection, newtonRaphson, limit } from "../src/numerical_analysis.ts";
+import { bisection, newtonRaphson, secant, limit } from "../src/numerical_analysis.ts";
+
+let f:RealFunction = Math.log;
+let df:RealFunction = x => 1/x;
 
 // Bisection method
-let f:RealFunction = Math.log;
 let gen1 = bisection(f);
 console.log("Bisection method for ln:");
 console.log(limit(1e-3, gen1([0.5,2]))); // 0.9999999999719384
 console.log(limit(1e-6, gen1([0.5,2]))); // 1
 
 // Newton-Raphson method
-let g:RealFunction = Math.log;
-let dg:RealFunction = x => 1/x;
-let gen2 = newtonRaphson(g, dg);
+let gen2 = newtonRaphson(f, df);
 console.log("Newton-Raphson method for ln:");
 console.log(limit(1e-3, gen2(2))); // 0.9999999999719384
 console.log(limit(1e-6, gen2(2))); // 1
+
+// Secant method
+let gen3 = secant(f);
+console.log("Secant method for ln:");
+console.log(limit(1e-3, gen3([0.5,2]))); // 0.99999544427369
+console.log(limit(1e-6, gen3([0.5,2]))); // 1.0000000000000036
 ```
 
 ### Bisection method
@@ -71,6 +77,29 @@ returns the next approximations using the Newton-Raphson method.
 export function newtonRaphson(f:RealFunction, df:RealFunction): (x:number) => Generator<number> {
     return curry2(iterate)(
         (x:number) => x - f(x)/df(x)
+    );
+}
+```
+
+### Secant method
+> The **secant method** is a root-finding algorithm that uses a succession of
+> roots of secant lines to better approximate a root of a function f. The
+> secant method is defined by the fllowing recurrence relation:
+> 
+> ![$x_{n}=x_{n-1}-f(x_{n-1}){\frac {x_{n-1}-x_{n-2}}{f(x_{n-1})-f(x_{n-2})}}$](http://latex.codecogs.com/png.latex?x_%7Bn%7D%3Dx_%7Bn-1%7D-f(x_%7Bn-1%7D)%7B%5Cfrac%20%7Bx_%7Bn-1%7D-x_%7Bn-2%7D%7D%7Bf(x_%7Bn-1%7D)-f(x_%7Bn-2%7D)%7D%7D) 
+
+`secant(f)` returns a function that given two initial values `[x0,x1]` (a
+tuple), returns the next approximations using the secant method.
+```typescript
+export function secant(f:RealFunction): (inital:[number,number]) => Generator<number> {
+    return compose(
+        curry2(map)(<RealValuedFunction<[number,number]>>snd),
+        curry2(iterate)(
+            ([x0,x1]:[number,number]) => {
+                let x2 = x0-f(x0)*((x0-x1)/(f(x0)-f(x1)));
+                return [x1,x2];
+            }
+        )
     );
 }
 ```
