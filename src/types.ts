@@ -20,8 +20,8 @@ export const __alias = "ty";
  * @type alias
  * 
  * @introduction
- * A real-valued function $f$ is a function whose values are real numbers. It is
- * a function that assigns a real number to each member of its domain.
+ * A **real-valued function** $f$ is a function whose values are real numbers.
+ * It is a function that assigns a real number to each member of its domain.
  * 
  * @description
  * Type alias for real-valued functions.
@@ -35,9 +35,9 @@ export type RealValuedFunction<Domain> = (x:Domain) => number;
  * @type alias
  * 
  * @introduction
- * A real-valued function $f$ of a real variable is a mathematical function
- * whose domain and codomain are contained in the set of real numbers denoted
- * as $\mathbb{R}$.
+ * A **real-valued function** $f$ **of a real variable** is a mathematical 
+ * function whose domain and codomain are contained in the set of real numbers 
+ * denoted as $\mathbb{R}$.
  * 
  * @description
  * Type alias for real-valued functions of a real variable.
@@ -46,12 +46,12 @@ export type RealValuedFunction<Domain> = (x:Domain) => number;
 export type RealFunction = (x:number) => number;
 
 /**
- * @name Predicate
+ * @name Predicates
  * @id Predicate
  * @type alias
  * 
  * @introduction
- * a predicate is commonly understood to be a Boolean-valued function
+ * A **predicate** is commonly understood to be a Boolean-valued function
  * $P: X \rightarrow \{true, false\}$, called a predicate on $X$.
  * 
  * @description

@@ -7,8 +7,8 @@
 
 This module defines common combinators used by other modules.
 ```typescript
-import { RealFunction } from "/path/to/types.ts";
-import { compose } from "/path/to/combinators.ts";
+import { RealFunction } from "../src/types.ts";
+import { compose } from "../src/combinators.ts";
 
 let succ:RealFunction = x => x+1;
 let doubleMe:RealFunction = x => x*2;

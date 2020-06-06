@@ -1,5 +1,4 @@
-// Usage: deno run --allow-read --allow-write --unstable doc.ts
-import { readFileStr, writeFileStr } from "https://deno.land/std/fs/mod.ts";
+// Usage: deno run --allow-read --allow-write doc.ts
 
 const tm_regex:RegExp = /\/\*\*((?:[^*]|\*[^*]|\*\*[^/])*)\*\*\/((?:[^/]|\/[^*]|\/\*[^*])*)/gm;
 const header_regex:RegExp = /@([a-z]+)([^@]*)/gm;
@@ -7,9 +6,12 @@ const tex_regex:RegExp = /\$((?:[^$\\]|\\\$|\\)*)\$/gm;
 
 // Parses a TypeMaths file and generates the Markdown files.
 function render_file(path:string, output:string): void {
-	readFileStr(path).then((text:string) => {
+	const encoder = new TextEncoder();
+	const decoder = new TextDecoder("utf-8");
+	Deno.readFile(path).then((data:Uint8Array) => {
+		const text = decoder.decode(data);
 		const content = render_text(text);
-		writeFileStr(output, content);
+		Deno.writeFile(output, encoder.encode(content));
 	});
 }
 
@@ -63,6 +65,7 @@ function parse_header(text:string): any {
 	let result:any = {};
 	let lines = text.split("\n").map(x => x.replace("*", "").trim());
 	let clean_text = lines.join("\n");
+	const decoder = new TextDecoder("utf-8");
 	while((match = header_regex.exec(clean_text)) !== null) {
 		result[match[1]] = match[2].trim();
 		if(match[1] === "introduction" || match[1] === "description")
@@ -73,6 +76,8 @@ function parse_header(text:string): any {
 			});
 		if(match[1] === "introduction")
 			result[match[1]] = "> " + result[match[1]].replace(/\n/g, "\n> ");
+		if(match[1] === "example")
+			result[match[1]] = decoder.decode(Deno.readFileSync("../examples/" + result[match[1]]));
 	}
 	return result;
 }

@@ -2,6 +2,7 @@
  * @name Combinators
  * @id combinators
  * @type module
+ * @example combinators.ts
  * 
  * @introduction
  * **Combinatory logic** is a notation to eliminate the need for quantified
@@ -11,16 +12,6 @@
  * 
  * @description
  * This module defines common combinators used by other modules.
- * 
- * @example
- * import { RealFunction } from "/path/to/types.ts";
- * import { compose } from "/path/to/combinators.ts";
- * 
- * let succ:RealFunction = x => x+1;
- * let doubleMe:RealFunction = x => x*2;
- * let h = compose(doubleMe, succ);
- * console.log(h(3)); // 8
- * console.log(h(5)); // 12
  * 
  **/
 export const __name = "combinators";
