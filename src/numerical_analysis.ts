@@ -89,10 +89,13 @@ export function newtonRaphson(f:RealFunction, df:RealFunction): (x:number) => Ge
  * 
  * @introduction
  * The **secant method** is a root-finding algorithm that uses a succession of
- * roots of secant lines to better approximate a root of a function f. The
- * secant method is defined by the fllowing recurrence relation:
+ * roots of secant lines to better approximate a root of a function $f$. The
+ * secant method is defined by the following recurrence relation
  * 
- * $x_{n}=x_{n-1}-f(x_{n-1}){\frac {x_{n-1}-x_{n-2}}{f(x_{n-1})-f(x_{n-2})}}$
+ * $x_{n}=x_{n-1}-f(x_{n-1}){\frac{x_{n-1}-x_{n-2}}{f(x_{n-1})-f(x_{n-2})}} \ $
+ * 
+ * that requires two initial values, $x_0$ and $x_1$, which should ideally be
+ * chosen to lie close to the root. 
  * 
  * @description
  * `secant(f)` returns a function that given two initial values `[x0,x1]` (a

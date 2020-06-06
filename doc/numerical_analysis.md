@@ -83,10 +83,13 @@ export function newtonRaphson(f:RealFunction, df:RealFunction): (x:number) => Ge
 
 ### Secant method
 > The **secant method** is a root-finding algorithm that uses a succession of
-> roots of secant lines to better approximate a root of a function f. The
-> secant method is defined by the fllowing recurrence relation:
+> roots of secant lines to better approximate a root of a function ![$f$](http://latex.codecogs.com/png.latex?f) . The
+> secant method is defined by the following recurrence relation
 > 
-> ![$x_{n}=x_{n-1}-f(x_{n-1}){\frac {x_{n-1}-x_{n-2}}{f(x_{n-1})-f(x_{n-2})}}$](http://latex.codecogs.com/png.latex?x_%7Bn%7D%3Dx_%7Bn-1%7D-f(x_%7Bn-1%7D)%7B%5Cfrac%20%7Bx_%7Bn-1%7D-x_%7Bn-2%7D%7D%7Bf(x_%7Bn-1%7D)-f(x_%7Bn-2%7D)%7D%7D) 
+> ![$x_{n}=x_{n-1}-f(x_{n-1}){\frac{x_{n-1}-x_{n-2}}{f(x_{n-1})-f(x_{n-2})}} \ $](http://latex.codecogs.com/png.latex?x_%7Bn%7D%3Dx_%7Bn-1%7D-f(x_%7Bn-1%7D)%7B%5Cfrac%7Bx_%7Bn-1%7D-x_%7Bn-2%7D%7D%7Bf(x_%7Bn-1%7D)-f(x_%7Bn-2%7D)%7D%7D%20%5C%20) 
+> 
+> that requires two initial values, ![$x_0$](http://latex.codecogs.com/png.latex?x_0)  and ![$x_1$](http://latex.codecogs.com/png.latex?x_1) , which should ideally be
+> chosen to lie close to the root.
 
 `secant(f)` returns a function that given two initial values `[x0,x1]` (a
 tuple), returns the next approximations using the secant method.

@@ -46,7 +46,7 @@ export function id<A>(x:A): A {
  * the function $g$ is applied to the result of applying the function $f$ to
  * $x$. That is, the functions $f:X \rightarrow Y$ and $g:Y \rightarrow Z$ are
  * composed to yield a function that maps $x$ in $X$ to $g(f(x))$ in $Z$. The
- * resulting composite function is denoted $g \circ f : X \rightarrow Z$.
+ * resulting composite function is denoted $g \circ f : X \rightarrow Z$.
  * 
  * @description
  * `compose(g, f)` returns the composite function $g \circ f$.
