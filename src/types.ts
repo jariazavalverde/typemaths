@@ -44,3 +44,18 @@ export type RealValuedFunction<Domain> = (x:Domain) => number;
  * 
  **/
 export type RealFunction = (x:number) => number;
+
+/**
+ * @name Predicate
+ * @id Predicate
+ * @type alias
+ * 
+ * @introduction
+ * a predicate is commonly understood to be a Boolean-valued function
+ * $P: X \rightarrow \{true, false\}$, called a predicate on $X$.
+ * 
+ * @description
+ * Type alias for predicates.
+ * 
+ **/
+export type Predicate<Domain> = (x:Domain) => boolean;
