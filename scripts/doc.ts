@@ -84,6 +84,7 @@ function parse_header(text:string): any {
 
 // Do it!
 render_file("../src/types.ts", "../doc/types.md");
+render_file("../src/derivative.ts", "../doc/derivative.md");
 render_file("../src/generators.ts", "../doc/generators.md");
 render_file("../src/combinators.ts", "../doc/combinators.md");
 render_file("../src/numerical_analysis.ts", "../doc/numerical_analysis.md");

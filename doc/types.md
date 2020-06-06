@@ -32,3 +32,22 @@ Type alias for predicates.
 ```typescript
 export type Predicate<Domain> = (x:Domain) => boolean;
 ```
+
+### Elementary functions
+> An elementary function is a function of a single variable composed of
+> particular simple functions. Elementary functions are typically defined as a
+> sum, product, and/or composition of finitely many polynomials, rational
+> functions, trigonometric and exponential functions, and their inverse
+> functions.
+
+Enumeration for elementary functions.
+```typescript
+export enum ElementaryFunction {
+    Addition, Substraction, Multiplication, Division, 
+    Constant, Power, Root, Exponential, Logarithm,
+    Sine, Cosine, Tangent, Cosecant, Secant, Cotangent,
+    Arcsine, Arccosine, Arctangent, Arccosecant, Arcsecant, Arccotangent,
+    Sineh, Cosineh, Tangenth, Cosecanth, Secanth, Cotangenth,
+    Arcsineh, Arccosineh, Arctangenth, Arccosecanth, Arcsecanth, Arccotangenth
+};
+```

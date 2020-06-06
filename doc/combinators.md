@@ -35,7 +35,7 @@ export function id<A>(x:A): A {
 > the function ![$g$](http://latex.codecogs.com/png.latex?g)  is applied to the result of applying the function ![$f$](http://latex.codecogs.com/png.latex?f)  to
 > ![$x$](http://latex.codecogs.com/png.latex?x) . That is, the functions ![$f:X \rightarrow Y$](http://latex.codecogs.com/png.latex?f%3AX%20%5Crightarrow%20Y)  and ![$g:Y \rightarrow Z$](http://latex.codecogs.com/png.latex?g%3AY%20%5Crightarrow%20Z)  are
 > composed to yield a function that maps ![$x$](http://latex.codecogs.com/png.latex?x)  in ![$X$](http://latex.codecogs.com/png.latex?X)  to ![$g(f(x))$](http://latex.codecogs.com/png.latex?g(f(x)))  in ![$Z$](http://latex.codecogs.com/png.latex?Z) . The
-> resulting composite function is denoted ![$g \ocircle f : X \rightarrow Z$](http://latex.codecogs.com/png.latex?g%20%5Cocircle%20f%20%3A%20X%20%5Crightarrow%20Z) .
+> resulting composite function is denoted ![$g \circ f : X \rightarrow Z$](http://latex.codecogs.com/png.latex?g%20%5Ccirc%20f%20%3A%20X%20%5Crightarrow%20Z) .
 
 `compose(g, f)` returns the composite function ![$g \circ f$](http://latex.codecogs.com/png.latex?g%20%5Ccirc%20f) .
 ```typescript

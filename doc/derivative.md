@@ -1,69 +1,43 @@
-import { RealFunction } from "./types.ts";
 
-/**
- * @name Differential calculus
- * @id derivative
- * @type module
- * @example derivative.ts
- * 
- * @introduction
- * **Differential calculus** is a subfield of calculus that studies the rates
- * at which quantities change.
- * 
- * @description
- * This module defines methods for computing the derivative of a real function.
- * 
- **/
+# Differential calculus
+> **Differential calculus** is a subfield of calculus that studies the rates
+> at which quantities change.
 
-export const __name = "derivative";
-export const __alias = "derivative";
+This module defines methods for computing the derivative of a real function.
+```typescript
+import { constant, identity, mul, pow, ln } from "../src/derivative.ts";
 
-/**
- * @name Differentiable functions
- * @id Differentiable
- * @type interface
- * 
- * @introduction
- * A **differentiable function** of one real variable is a function whose
- * derivative exists at each point in its domain.
- * 
- * @description
- * Interface for differentiable functions. A real function $f$ that implements
- * the `derivative` method, which returns the derivative $f'$.
- * 
- **/
+// f(x) = 4x, f'(x) = 4
+let f = mul(constant(4), identity());
+let df = f.derivative();
+console.log(f(3), df(3)); // 12 4
 
+// g(x) = 4x^2, g'(x) = 8x
+let g = mul(constant(4), pow(identity(), constant(2)));
+let dg = g.derivative();
+console.log(g(3), dg(3)); // 36 24
+
+// h(x) = ln(x^2), h'(x) = 1/(x^2) * 2x
+let h = ln(pow(identity(), constant(2)));
+let dh = h.derivative();
+console.log(h(3), dh(3)); // 2.1972245773362196 0.6666666666666666
+```
+
+### Differentiable functions
+> A **differentiable function** of one real variable is a function whose
+> derivative exists at each point in its domain.
+
+Interface for differentiable functions. A real function ![$f$](http://latex.codecogs.com/png.latex?f)  that implements
+the `derivative` method, which returns the derivative ![$f'$](http://latex.codecogs.com/png.latex?f') .
+```typescript
 export interface Differentiable extends RealFunction {
     derivative: () => Differentiable
 }
+```
 
-/**
- * @name Make differentiable functions
- * @id makeDerivative
- * @type function
- * @nodoc
- * 
- * @description
- * Given a real function $f$ and its derivative $f'$, returns a differentiable
- * function.
- * 
- **/
-function makeDerivative(f:RealFunction, df:() => Differentiable): Differentiable {
-    const g:Differentiable = x => f(x);
-    g.derivative = df;
-    return g;
-}
-
-/**
- * @name Differentiable elementary functions
- * @id identity / constant / add / sub / mul / div / pow / ln / log / sin / cos
- * @type function
- * 
- * @description
- * Differentiable version of elementary functions.
- * 
- **/
-
+### Differentiable elementary functions
+Differentiable version of elementary functions.
+```typescript
 // f(x) = x, f'(x) = 1
 export function identity(): Differentiable {
     return makeDerivative(x => x, () => constant(1));
@@ -147,3 +121,4 @@ export function cos(f:Differentiable): Differentiable {
         f.derivative()
     ));
 }
+```
