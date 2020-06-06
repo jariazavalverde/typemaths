@@ -1,7 +1,7 @@
 import { RealFunction } from "../src/types.ts";
 import { bisection, newtonRaphson, limit } from "../src/numerical_analysis.ts";
 
-// Bipartition method
+// Bisection method
 let f:RealFunction = Math.log;
 let gen1 = bisection(f);
 console.log("Bisection method for ln:");

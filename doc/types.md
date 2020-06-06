@@ -23,3 +23,12 @@ Type alias for real-valued functions of a real variable.
 ```typescript
 export type RealFunction = (x:number) => number;
 ```
+
+### Predicate
+> a predicate is commonly understood to be a Boolean-valued function
+> ![$P: X \rightarrow \{true, false\}$](http://latex.codecogs.com/png.latex?P%3A%20X%20%5Crightarrow%20%5C%7Btrue%2C%20false%5C%7D) , called a predicate on ![$X$](http://latex.codecogs.com/png.latex?X) .
+
+Type alias for predicates.
+```typescript
+export type Predicate<Domain> = (x:Domain) => boolean;
+```
