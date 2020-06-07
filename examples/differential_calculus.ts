@@ -1,4 +1,4 @@
-import { constant, identity, mul, pow, ln } from "../src/derivative.ts";
+import { constant, identity, mul, pow, ln } from "../src/calculus/differential.ts";
 
 // f(x) = 4x, f'(x) = 4
 let f = mul(constant(4), identity());

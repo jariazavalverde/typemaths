@@ -12,6 +12,7 @@ function render_file(path:string, output:string): void {
 		const text = decoder.decode(data);
 		const content = render_text(text);
 		Deno.writeFile(output, encoder.encode(content));
+		console.log(path, "ok!");
 	});
 }
 
@@ -32,16 +33,15 @@ function render_text(text:string): string {
 			md += blocks[i].header.introduction + "\n\n";
 		if(blocks[i].header.description)
 			md += blocks[i].header.description + "\n";
+		md += "```typescript\n";
+		md += blocks[i].body;
+		md += "\n```\n";
 		if(i === 0 && blocks[i].header.type === "module") {
 			if(blocks[i].header.example) {
 				md += "```typescript\n";
 				md += blocks[i].header.example;
 				md += "\n```\n";
 			}
-		} else {
-			md += "```typescript\n";
-			md += blocks[i].body;
-			md += "\n```\n";
 		}
 	}
 	return md;
@@ -84,7 +84,11 @@ function parse_header(text:string): any {
 
 // Do it!
 render_file("../src/types.ts", "../doc/types.md");
-render_file("../src/derivative.ts", "../doc/derivative.md");
 render_file("../src/generators.ts", "../doc/generators.md");
 render_file("../src/combinators.ts", "../doc/combinators.md");
+// Numerical analysis
 render_file("../src/numerical_analysis.ts", "../doc/numerical_analysis.md");
+render_file("../src/numerical_analysis/root_finding.ts", "../doc/numerical_analysis/root_finding.md");
+// Calculus
+render_file("../src/calculus.ts", "../doc/calculus.md");
+render_file("../src/calculus/differential.ts", "../doc/calculus/differential.md");

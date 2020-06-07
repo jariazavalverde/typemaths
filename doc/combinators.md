@@ -7,6 +7,10 @@
 
 This module defines common combinators used by other modules.
 ```typescript
+export const __name = "combinators";
+export const __alias = "com";
+```
+```typescript
 import { RealFunction } from "../src/types.ts";
 import { compose } from "../src/combinators.ts";
 

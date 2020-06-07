@@ -6,6 +6,10 @@
 This module defines common operations over ES6 generators used by other
 modules.
 ```typescript
+export const __name = "generators";
+export const __alias = "gen";
+```
+```typescript
 import { RealFunction, Predicate } from "../src/types.ts";
 import { map, filter, take, enumFrom } from "../src/generators.ts";
 

@@ -1,10 +1,10 @@
-import { RealFunction } from "./types.ts";
+import { RealFunction } from "../types.ts";
 
 /**
  * @name Differential calculus
- * @id derivative
+ * @id calculus / differential
  * @type module
- * @example derivative.ts
+ * @example differential_calculus.ts
  * 
  * @introduction
  * **Differential calculus** is a subfield of calculus that studies the rates
@@ -15,8 +15,8 @@ import { RealFunction } from "./types.ts";
  * 
  **/
 
-export const __name = "derivative";
-export const __alias = "derivative";
+export const __name = "differential";
+export const __alias = "diff";
 
 /**
  * @name Differentiable functions
@@ -41,7 +41,6 @@ export interface Differentiable extends RealFunction {
  * @name Make differentiable functions
  * @id makeDerivative
  * @type function
- * @nodoc
  * 
  * @description
  * Given a real function $f$ and its derivative $f'$, returns a differentiable

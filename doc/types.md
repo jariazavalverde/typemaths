@@ -4,6 +4,10 @@
 > how the programmer intends to use the data.
 
 This module defines common types and interfaces used by other modules.
+```typescript
+export const __name = "types";
+export const __alias = "ty";
+```
 
 ### Real-valued functions
 > A **real-valued function** ![$f$](http://latex.codecogs.com/png.latex?f)  is a function whose values are real numbers.

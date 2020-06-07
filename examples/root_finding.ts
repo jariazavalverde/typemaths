@@ -1,5 +1,5 @@
 import { RealFunction } from "../src/types.ts";
-import { bisection, newtonRaphson, secant, limit } from "../src/numerical_analysis.ts";
+import { bisection, newtonRaphson, secant, limit } from "../src/numerical_analysis/root_finding.ts";
 
 let f:RealFunction = Math.log;
 let df:RealFunction = x => 1/x;
