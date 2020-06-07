@@ -3,7 +3,7 @@ import { map, iterate } from "../generators.ts";
 import { snd, compose, curry2 } from "../combinators.ts";
 
 /**
- * @name Numerical analysis
+ * @name Root-finding algorithms
  * @id numerical_analysis / root_finding
  * @type module
  * @example root_finding.ts

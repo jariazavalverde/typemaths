@@ -8,7 +8,7 @@
 This module defines common combinators used by other modules.
 ```typescript
 export const __name = "combinators";
-export const __alias = "com";
+export const __alias = "combinators";
 ```
 ```typescript
 import { RealFunction } from "../src/types.ts";
@@ -30,6 +30,14 @@ Identity function.
 ```typescript
 export function id<A>(x:A): A {
     return x;
+}
+```
+
+### Constant
+`constant(x)` returns a unary function which evaluates to `x` for all inputs.
+```typescript
+export function constant<A,B>(x:A): (y:B) => A {
+    return (_x) => x;
 }
 ```
 

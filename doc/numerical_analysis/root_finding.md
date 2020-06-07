@@ -1,5 +1,5 @@
 
-# Numerical analysis
+# Root-finding algorithms
 > A **root-finding** algorithm is an algorithm for finding zeroes, also called
 > **roots**, of continuous functions. A zero of a function ![$f$](http://latex.codecogs.com/png.latex?f)  is a number ![$x$](http://latex.codecogs.com/png.latex?x) 
 > such that ![$f(x) = 0$](http://latex.codecogs.com/png.latex?f(x)%20%3D%200) . As, generally, the zeroes of a function cannot be

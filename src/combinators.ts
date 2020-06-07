@@ -15,7 +15,7 @@
  * 
  **/
 export const __name = "combinators";
-export const __alias = "com";
+export const __alias = "combinators";
 
 /**
  * @name Identity function
@@ -33,6 +33,19 @@ export const __alias = "com";
  **/
 export function id<A>(x:A): A {
     return x;
+}
+
+/**
+ * @name Constant
+ * @id constant
+ * @type function
+ * 
+ * @description
+ * `constant(x)` returns a unary function which evaluates to `x` for all inputs.
+ * 
+ **/
+export function constant<A,B>(x:A): (y:B) => A {
+    return (_x) => x;
 }
 
 /**

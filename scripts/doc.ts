@@ -92,3 +92,11 @@ render_file("../src/numerical_analysis/root_finding.ts", "../doc/numerical_analy
 // Calculus
 render_file("../src/calculus.ts", "../doc/calculus.md");
 render_file("../src/calculus/differential.ts", "../doc/calculus/differential.md");
+// Parser
+render_file("../src/parser.ts", "../doc/parser.md");
+render_file("../src/parser/syntactic_analysis.ts", "../doc/parser/syntactic_analysis.md");
+render_file("../src/parser/lexical_analysis.ts", "../doc/parser/lexical_analysis.md");
+// Category theory
+render_file("../src/category_theory.ts", "../doc/category_theory.md");
+render_file("../src/category_theory/functor.ts", "../doc/category_theory/functor.md");
+render_file("../src/category_theory/monad.ts", "../doc/category_theory/monad.md");
