@@ -119,16 +119,19 @@ export function pow(f:Differentiable, g:Differentiable): Differentiable {
     ));
 }
 
-// f(x) = ln(g(x)), f'(x) = 1/(g(x)) * g'(x)
+// f(x) = ln(g(x)), f'(x) = g'(x)/(g(x))
 export function ln(f:Differentiable): Differentiable {
-    return log(f, Math.E);
+    return makeDerivative(x => Math.log(f(x)), () => div(f.derivative(), f));
 }
 
-// f(x) = log_b(g(x)), f'(x) = 1/(g(x) * ln(b)) * g'(x)
-export function log(f:Differentiable, b:number): Differentiable {
-    return makeDerivative(x => Math.log(f(x))/Math.log(b), () => mul(
-        div(constant(1), mul(f, ln(constant(b)))),
-        f.derivative()
+// f(x) = log_{h(x)}(g(x)), f'(x) = (g(x)*f'(x)*ln(g(x)) - f(x)*g'(x)*ln(f(x))) / (ln(g(x))**2*f(x)*g(x))
+export function log(f:Differentiable, b:Differentiable): Differentiable {
+    return makeDerivative(x => Math.log(f(x))/Math.log(b(x)), () => div(
+        sub(
+            mul(b, mul(f.derivative(), ln(b))),
+            mul(f, mul(b.derivative(), ln(f)))
+        ),
+        mul(mul(ln(b),ln(b)), mul(f,b))
     ));
 }
 
