@@ -9,9 +9,9 @@ This module defines functions and interfaces for monads.
 export const __name = "monad";
 export const __alias = "monad";
 
-export interface Monad<A> extends Functor<A> {
-    pure: (x:A) => Monad<A>
-    bind: <B>(f:(x:A) => Monad<B>) => Monad<B>
+export interface Monad<A> extends Applicative<A> {
+    bind<B>(f:(x:A) => Monad<B>): any;
+    bind<B,C extends Monad<B>>(f:(x:A) => Monad<B>): C;
 };
 ```
 
