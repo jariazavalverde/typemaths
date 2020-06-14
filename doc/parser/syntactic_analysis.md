@@ -84,6 +84,27 @@ Parser.prototype.or = function<S, A>(this:Parser<S, A>, f:Parser<S, A>): Parser<
         return f.runParser(input);
     });
 };
+
+Parser.prototype.many = function<S, A>(this:Parser<S, A>): Parser<S, Array<A>> {
+    return new Parser(input => {
+		let val: Array<[Array<A>, S]>,
+		     xs: Array<[Array<A>, S]> = this.runParser(input).map((x: [A,S]) => [[x[0]], x[1]]);
+		if(xs.length == 0)
+            return [[[], input]];
+        val = xs;
+		while(xs.length > 0) {
+            val = xs;
+            xs = Array.prototype.concat.apply([], val.map(
+                (x:[Array<A>,S]) => this.runParser(x[1]).map(
+                    (y:[A,S]) => [x[0].concat([y[0]]), y[1]])));
+		}
+		return val;
+	});
+};
+
+Parser.prototype.some = function<S, A>(this:Parser<S, A>): Parser<S, Array<A>> {
+    return liftA2((x:A, xs:Array<A>) => [x].concat(xs), this, this.many());
+};
 ```
 
 ### satisfy

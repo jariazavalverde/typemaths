@@ -18,36 +18,8 @@ export const __alias = "alternative";
 export interface Alternative<A> extends Applicative<A> {
     empty(): this;
     or(f:this): this;
+    many(): any;
+    many<A, Fa extends Alternative<Array<A>>>(): Fa;
+    some(): any;
+    some<A, Fa extends Alternative<Array<A>>>(): Fa;
 };
-
-/**
- * @name Many
- * @id many
- * @type function
- * 
- * @description
- * Zero or more.
- * 
- **/
-export function many<A,Fa extends Alternative<Array<A>>>(v:Alternative<A>): Fa {
-    let some_v:any = {}, many_v:any = {};
-    some_v.alt = liftA2((x:A,xs:Array<A>) => [x].concat(xs), v, many_v.alt);
-    many_v.alt = some_v.alt.or(v.pure([]));
-    return many_v.alt;
-}
-
-/**
- * @name Some
- * @id some
- * @type function
- * 
- * @description
- * One or more.
- * 
- **/
-export function some<A,Fa extends Alternative<Array<A>>>(v:Alternative<A>): Fa {
-    let some_v:any = {}, many_v:any = {};
-    some_v.alt = liftA2((x:A,xs:Array<A>) => [x].concat(xs), v, many_v.alt);
-    many_v.alt = some_v.alt.or(v.pure([]));
-    return some_v.alt;
-}

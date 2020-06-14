@@ -1,4 +1,5 @@
 import { RealFunction } from "../types.ts";
+import { ExprHandler, mkExpression } from "../parser/expression.ts";
 
 /**
  * @name Differential calculus
@@ -35,6 +36,54 @@ export const __alias = "diff";
 
 export interface Differentiable extends RealFunction {
     derivative: () => Differentiable
+}
+
+/**
+ * @name Read a differentiable function from a string
+ * @id makeDerivative
+ * @type function
+ * 
+ * @description
+ * Given a string representation of a function and a variable, returns a 
+ * differentiable function.
+ * 
+ **/
+function mkHandler(variable?:string): ExprHandler<Differentiable> {
+    return {
+        fromNumber: (n:number) => constant(n),
+        fromOperation: (op:string, args:Array<Differentiable>) => {
+            switch(op + "/" + args.length) {
+                case "+/1": return args[0];
+                case "+/2": return add(args[0], args[1]);
+                case "-/1": return mul(constant(-1), args[0]);
+                case "-/2": return sub(args[0], args[1]);
+                case "*/2": return mul(args[0], args[1]);
+                case "//2": return div(args[0], args[1]);
+                case "**/2":
+                case "^/2": return pow(args[0], args[1]);
+                case "sin/1": return sin(args[0]);
+                case "cos/1": return cos(args[0]);
+                case "ln/1": return ln(args[0]);
+                case "log/2": return log(args[0], args[1]);
+                case "E/0": return constant(Math.E);
+                case "PI/0": return constant(Math.PI);
+            }
+            if(args.length === 0 && (variable === op || variable === undefined)) {
+                variable = op;
+                return identity();
+            }
+            throw "differentiable exception: unknown operation " + op + "/" + args.length;
+        }
+    };
+};
+
+export function read(fn:string, variable?:string): Differentiable {
+    let handler = mkHandler(variable);
+    let parser = mkExpression(handler);
+    let result = parser(fn);
+    if(result.length === 0 || result[0][1].length !== 0)
+        throw "differentiable exception: unknown function " + fn;
+    return result[0][0];
 }
 
 /**

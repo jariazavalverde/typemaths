@@ -1,5 +1,5 @@
 
-# Expression
+# Parsing mathematical expressions
 > A **mathematical expression** is a finite combination of symbols that is
 > well-formed according to rules that depend on the context. Mathematical
 > symbols can designate numbers (constants), variables, operations, functions,
@@ -74,7 +74,9 @@ Given a handler for tokens, returns a parser for expressions.
 ```typescript
 export function mkExpression<E>(handler:ExprHandler<E>): (input:string) => Array<[E, Array<Token>]> {
     return (input:string) => {
-        const tokens = tokenizer.tokenize(input);
+        const tokens = tokenizer.tokenize(input).filter(
+            (token:Token) => token.type !== "whitespace"
+        );
         return parse_expression(handler).runParser(tokens);
     };
 }
@@ -130,7 +132,7 @@ function parse_factor<E>(handler:ExprHandler<E>): Parser<Array<Token>, E> {
     ));
 }
 
-// <base> -> number | identifier ( args... ) | ( <expr> )
+// <base> -> number | identifier ( args... ) | identifier | ( <expr> )
 function parse_base<E>(handler:ExprHandler<E>): Parser<Array<Token>, E> {
     // <number>
     return parse_number(handler)
@@ -145,7 +147,7 @@ function parse_base<E>(handler:ExprHandler<E>): Parser<Array<Token>, E> {
                 (_rparen) => new Parser<Array<Token>, E>().pure(expr)
             )
         )
-    // id(args...)
+    // identifier(args...)
     )).or(satisfy(
         (token:Token) => token.type === "identifier"
     ).bind<E, Parser<Array<Token>, E>>(
@@ -153,13 +155,13 @@ function parse_base<E>(handler:ExprHandler<E>): Parser<Array<Token>, E> {
             (token:Token) => token.type === "lparen"
         ).bind<E, Parser<Array<Token>, E>>(
             (_lparen) => parse_expression(handler).bind<E, Parser<Array<Token>, E>>(
-                (expr:E) => many<E, Parser<Array<Token>, Array<E>>>(
+                (expr:E) =>
                     satisfy(
                         (token:Token) => token.type === "comma"
                     ).bind<E, Parser<Array<Token>, E>>(
                         (_comma) => parse_expression(handler)
-                    )
-                ).bind<E, Parser<Array<Token>, E>>(
+                    ).many<E, Parser<Array<Token>, Array<E>>>()
+                .bind<E, Parser<Array<Token>, E>>(
                     (args:Array<E>) => satisfy(
                         (token:Token) => token.type === "rparen"
                     ).bind<E, Parser<Array<Token>, E>>(
@@ -169,6 +171,12 @@ function parse_base<E>(handler:ExprHandler<E>): Parser<Array<Token>, E> {
                     )
                 )
             )
+        )
+    )).or(satisfy(
+        (token:Token) => token.type === "identifier"
+    ).bind<E, Parser<Array<Token>, E>>(
+        (id:Token) => new Parser<Array<Token>, E>().pure(
+            handler.fromOperation(id.text, [])
         )
     ));
 }

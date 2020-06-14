@@ -1,4 +1,8 @@
-import { constant, identity, mul, pow, ln, log } from "../src/calculus/differential.ts";
+import { read, constant, identity, mul, pow, ln, log } from "../src/calculus/differential.ts";
+
+// f(x) = x^2-ln(x)/(sin(x)*cos(x))
+let r1 = read("x^2-ln(x)/(sin(x)*cos(x))");
+console.log(r1(0.5), r1.derivative()(0.5));
 
 // f(x) = 4x, f'(x) = 4
 let f = mul(constant(4), identity());
