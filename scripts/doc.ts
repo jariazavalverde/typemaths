@@ -96,7 +96,10 @@ render_file("../src/calculus/differential.ts", "../doc/calculus/differential.md"
 render_file("../src/parser.ts", "../doc/parser.md");
 render_file("../src/parser/syntactic_analysis.ts", "../doc/parser/syntactic_analysis.md");
 render_file("../src/parser/lexical_analysis.ts", "../doc/parser/lexical_analysis.md");
+render_file("../src/parser/expression.ts", "../doc/parser/expression.md");
 // Category theory
 render_file("../src/category_theory.ts", "../doc/category_theory.md");
 render_file("../src/category_theory/functor.ts", "../doc/category_theory/functor.md");
+render_file("../src/category_theory/applicative.ts", "../doc/category_theory/applicative.md");
 render_file("../src/category_theory/monad.ts", "../doc/category_theory/monad.md");
+render_file("../src/category_theory/alternative.ts", "../doc/category_theory/alternative.md");
