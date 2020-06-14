@@ -63,8 +63,32 @@ function mkHandler(variable?:string): ExprHandler<Differentiable> {
                 case "^/2": return pow(args[0], args[1]);
                 case "sin/1": return sin(args[0]);
                 case "cos/1": return cos(args[0]);
+                case "tan/1": return tan(args[0]);
+                case "cosec/1": return div(constant(1), sin(args[0]));
+                case "sec/1": return div(constant(1), cos(args[0]));
+                case "cotan/1": return div(constant(1), tan(args[0]));
+                case "asin/1": return asin(args[0]);
+                case "acos/1": return acos(args[0]);
+                case "atan/1": return atan(args[0]);
+                case "acosec/1": return asin(div(constant(1),args[0]));
+                case "asec/1": return sub(constant(Math.PI/2), asin(div(constant(1),args[0])));
+                case "acotan/1": return sub(constant(Math.PI/2), atan(args[0]));
+                case "sinh/1": return sinh(args[0]);
+                case "cosh/1": return cosh(args[0]);
+                case "tanh/1": return tanh(args[0]);
+                case "cosech/1": return div(constant(1), sinh(args[0]));
+                case "sech/1": return div(constant(1), cosh(args[0]));
+                case "cotanh/1": return div(constant(1), tanh(args[0]));
+                case "asinh/1": return asinh(args[0]);
+                case "acosh/1": return acosh(args[0]);
+                case "atanh/1": return atanh(args[0]);
+                case "acosech/1": return asinh(div(constant(1), args[0]));
+                case "asech/1": return acosh(div(constant(1), args[0]));
+                case "acotanh/1": return atanh(div(constant(1), args[0]));
                 case "ln/1": return ln(args[0]);
                 case "log/2": return log(args[0], args[1]);
+                case "sqrt/1": return sqrt(args[0]);
+                case "root/2": return root(args[0], args[1]);
                 case "E/0": return constant(Math.E);
                 case "PI/0": return constant(Math.PI);
             }
@@ -184,6 +208,18 @@ export function log(f:Differentiable, b:Differentiable): Differentiable {
     ));
 }
 
+// f(x) = sqrt(g(x)), f'(x) = 1/2 * g(x)^(-1/2) * g'(x)
+export function sqrt(f:Differentiable): Differentiable {
+    return makeDerivative(x => Math.sqrt(f(x)), () => mul(
+        constant(0.5), mul(pow(f, constant(-0.5)), f.derivative())
+    ));
+}
+
+// f(x) = root(g(x),h(x)), f'(x) = (g(x)^(1(h(x))))'
+export function root(f:Differentiable, g:Differentiable): Differentiable {
+    return pow(f, div(constant(1), g));
+}
+
 // f(x) = sin(g(x)), f'(x) = cos(g(x)) * g'(x)
 export function sin(f:Differentiable): Differentiable {
     return makeDerivative(x => Math.sin(f(x)), () => mul(
@@ -196,5 +232,86 @@ export function cos(f:Differentiable): Differentiable {
     return makeDerivative(x => Math.cos(f(x)), () => mul(
         mul(constant(-1), cos(f)),
         f.derivative()
+    ));
+}
+
+// f(x) = tan(g(x)), f'(x) = g'(x) / (cos(g(x)))^2 
+export function tan(f:Differentiable): Differentiable {
+    return makeDerivative(x => Math.tan(f(x)), () => div(
+        f.derivative(),
+        mul(cos(f), cos(f))
+    ));
+}
+
+// f(x) = asin(g(x)), f'(x) = g'(x) / sqrt(1-g(x)^2)
+export function asin(f:Differentiable): Differentiable {
+    return makeDerivative(x => Math.asin(f(x)), () => div(
+        f.derivative(),
+        sqrt(sub(constant(1), mul(f, f)))
+    ));
+}
+
+// f(x) = acos(g(x)), f'(x) = -g'(x) / sqrt(1-g(x)^2)
+export function acos(f:Differentiable): Differentiable {
+    return makeDerivative(x => Math.acos(f(x)), () => mul(
+        constant(-1),
+        div(
+            f.derivative(),
+            sqrt(sub(constant(1), mul(f, f)))
+        )
+    ));
+}
+
+// f(x) = atan(g(x)), f'(x) = g'(x) / (1 + g(x)^2)
+export function atan(f:Differentiable): Differentiable {
+    return makeDerivative(x => Math.atan(f(x)), () => div(
+        f.derivative(),
+        sqrt(add(constant(1), mul(f, f)))
+    ));
+}
+
+// f(x) = sinh(g(x)), f'(x) = cosh(g(x)) * g'(x)
+export function sinh(f:Differentiable): Differentiable {
+    return makeDerivative(x => Math.sinh(f(x)), () => mul(
+        cosh(f), f.derivative()
+    ));
+}
+
+// f(x) = cosh(g(x)), f'(x) = sinh(g(x)) * g'(x)
+export function cosh(f:Differentiable): Differentiable {
+    return makeDerivative(x => Math.cosh(f(x)), () => mul(
+        sinh(f), f.derivative()
+    ));
+}
+
+// f(x) = tanh(g(x)), f'(x) = g'(x) / (cosh(g(x)))^2
+export function tanh(f:Differentiable): Differentiable {
+    return makeDerivative(x => Math.tanh(f(x)), () => div(
+        f.derivative(),
+        cosh(mul(f, f))
+    ));
+}
+
+// f(x) = asinh(g(x)), f'(x) = g'(x) / sqrt(g(x)^2 + 1)
+export function asinh(f:Differentiable): Differentiable {
+    return makeDerivative(x => Math.asinh(f(x)), () => div(
+        f.derivative(),
+        sqrt(add(mul(f, f), constant(1)))
+    ));
+}
+
+// f(x) = acosh(g(x)), f'(x) = g'(x) / sqrt(g(x)^2 - 1)
+export function acosh(f:Differentiable): Differentiable {
+    return makeDerivative(x => Math.acosh(f(x)), () => div(
+        f.derivative(),
+        sqrt(sub(mul(f, f), constant(1)))
+    ));
+}
+
+// f(x) = atanh(g(x)), f'(x) = g'(x) / (1 - (g(x))^2)
+export function atanh(f:Differentiable): Differentiable {
+    return makeDerivative(x => Math.atanh(f(x)), () => div(
+        f.derivative(),
+        sub(constant(1), mul(f, f))
     ));
 }
