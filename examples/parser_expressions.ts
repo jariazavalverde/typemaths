@@ -1,6 +1,6 @@
-import { ExprHandler, expression } from "../src/parser/expression.ts";
+import { ExprHandler, mkExpression } from "../src/parser/expression.ts";
 
-var handler:ExprHandler<number> = {
+const handler:ExprHandler<number> = {
     fromNumber: x => x,
     fromOperation: (op, args) => {
         switch(op + "/" + args.length) {
@@ -21,9 +21,11 @@ var handler:ExprHandler<number> = {
     }
 };
 
-console.log(expression(handler)("1+2+3")); // [[6,[]]]
-console.log(expression(handler)("1*2+3*4")); // [[14,[]]]
-console.log(expression(handler)("1*(2+3)*4")); // [[20,[]]]
-console.log(expression(handler)("cos(0)")); // [[1,[]]]
-console.log(expression(handler)("(cos(0)+1)^2")); // [[4,[]]]
-console.log(expression(handler)("ln(cos(0)+1-1)")); // [[0,[]]]
+const calc = mkExpression(handler);
+
+console.log(calc("1+2+3")); // [[6,[]]]
+console.log(calc("1*2+3*4")); // [[14,[]]]
+console.log(calc("1*(2+3)*4")); // [[20,[]]]
+console.log(calc("cos(0)")); // [[1,[]]]
+console.log(calc("(cos(0)+1)^2")); // [[4,[]]]
+console.log(calc("ln(cos(0)+1-1)")); // [[0,[]]]

@@ -6,6 +6,7 @@ import { many } from "../category_theory/alternative.ts";
  * @name Expression
  * @id parser / expression
  * @type module
+ * @example parser_expressions.ts
  * 
  * @introduction
  * A **mathematical expression** is a finite combination of symbols that is
@@ -22,13 +23,22 @@ import { many } from "../category_theory/alternative.ts";
 export const __name = "expression";
 export const __alias = "expr";
 
+/**
+ * @name Interface for expression handlers
+ * @id ExprHandler
+ * @type interface
+ * 
+ * @description
+ * Interface for expression handlers.
+ * 
+ **/
 export interface ExprHandler<E> {
     fromNumber(n:number): E;
     fromOperation(id:string, args:Array<E>): E;
 };
 
 /**
- * @name tokenizer
+ * @name Tokenizer for mathematical expressions
  * @id tokenizer
  * @type Tokenizer
  * 
@@ -47,15 +57,15 @@ export const tokenizer = new Tokenizer({
 });
 
 /**
- * @name expression
- * @id expression
+ * @name Make a parser for mathematical expressions
+ * @id mkExpression
  * @type function
  * 
  * @description
- * Given a handler fot tokens, returns a parser for expressions.
+ * Given a handler for tokens, returns a parser for expressions.
  * 
  **/
-export function expression<E>(handler:ExprHandler<E>): (input:string) => Array<[E, Array<Token>]> {
+export function mkExpression<E>(handler:ExprHandler<E>): (input:string) => Array<[E, Array<Token>]> {
     return (input:string) => {
         const tokens = tokenizer.tokenize(input);
         return parse_expression(handler).runParser(tokens);
@@ -63,20 +73,24 @@ export function expression<E>(handler:ExprHandler<E>): (input:string) => Array<[
 }
 
 /**
- * @name parse_expression
- * @id parse_expression
+ * @name Grammar for mathematical expressions
+ * @id parse_expression / parse_expression_list / parse_term / parse_term_list /
+ *     parse_factor / parse_base / parse_operator / parse_number
  * @type Parser
  * 
  * @description
- * Parser for mathematical expressions.
+ * Parsers for mathematical expressions.
  * 
  **/
+
+// <expr> -> <term> <expr'>
 function parse_expression<E>(handler:ExprHandler<E>): Parser<Array<Token>, E> {
     return parse_term(handler).bind<E, Parser<Array<Token>, E>>(
         (term:E) => parse_expression_list(handler, term)
     );
 }
 
+// <expr'> -> + <expr'> | - <expr'> | epsilon
 function parse_expression_list<E>(handler:ExprHandler<E>, term1:E): Parser<Array<Token>, E> {
     return parse_operator(["+","-"]).bind<E, Parser<Array<Token>, E>>(
         (op:Token) => parse_term(handler).bind<E, Parser<Array<Token>, E>>(
@@ -85,12 +99,14 @@ function parse_expression_list<E>(handler:ExprHandler<E>, term1:E): Parser<Array
     ).or(new Parser<Array<Token>, E>().pure(term1));
 }
 
+// <term> -> <factor> <factor'>
 function parse_term<E>(handler:ExprHandler<E>): Parser<Array<Token>, E> {
     return parse_factor(handler).bind<E, Parser<Array<Token>, E>>(
         (factor:E) => parse_term_list(handler, factor)
     );
 }
 
+// <term'> -> * <term'> | / <term'> | % <term'> | epsilon
 function parse_term_list<E>(handler:ExprHandler<E>, factor1:E): Parser<Array<Token>, E> {
     return parse_operator(["*","/","%"]).bind<E, Parser<Array<Token>, E>>(
         (op:Token) => parse_factor(handler).bind<E, Parser<Array<Token>, E>>(
@@ -99,10 +115,11 @@ function parse_term_list<E>(handler:ExprHandler<E>, factor1:E): Parser<Array<Tok
     ).or(new Parser<Array<Token>, E>().pure(factor1));
 }
 
+// <factor> -> + <factor> | - <factor> | <base> ^ <base> | <base> ** <base> | <base>
 function parse_factor<E>(handler:ExprHandler<E>): Parser<Array<Token>, E> {
     return parse_operator(["+","-"]).bind<E, Parser<Array<Token>, E>>(
         (op:Token) => parse_factor(handler).bind<E, Parser<Array<Token>, E>>(
-            (factor:E) => parse_term_list(handler, handler.fromOperation(op.text, [factor]))
+            (factor:E) => new Parser<Array<Token>, E>().pure(handler.fromOperation(op.text, [factor]))
         )
     ).or(parse_base(handler).bind<E, Parser<Array<Token>, E>>(
         (base1:E) => parse_operator(["^","**"]).bind<E, Parser<Array<Token>, E>>(
@@ -113,6 +130,7 @@ function parse_factor<E>(handler:ExprHandler<E>): Parser<Array<Token>, E> {
     ));
 }
 
+// <base> -> number | identifier ( args... ) | ( <expr> )
 function parse_base<E>(handler:ExprHandler<E>): Parser<Array<Token>, E> {
     // <number>
     return parse_number(handler)

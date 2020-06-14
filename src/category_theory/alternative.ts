@@ -21,7 +21,7 @@ export interface Alternative<A> extends Applicative<A> {
 };
 
 /**
- * @name many
+ * @name Many
  * @id many
  * @type function
  * 
@@ -37,7 +37,7 @@ export function many<A,Fa extends Alternative<Array<A>>>(v:Alternative<A>): Fa {
 }
 
 /**
- * @name some
+ * @name Some
  * @id some
  * @type function
  * 

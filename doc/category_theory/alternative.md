@@ -13,7 +13,7 @@ export interface Alternative<A> extends Applicative<A> {
 };
 ```
 
-### many
+### Many
 Zero or more.
 ```typescript
 export function many<A,Fa extends Alternative<Array<A>>>(v:Alternative<A>): Fa {
@@ -24,7 +24,7 @@ export function many<A,Fa extends Alternative<Array<A>>>(v:Alternative<A>): Fa {
 }
 ```
 
-### some
+### Some
 One or more.
 ```typescript
 export function some<A,Fa extends Alternative<Array<A>>>(v:Alternative<A>): Fa {
